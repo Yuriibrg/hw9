@@ -1,7 +1,6 @@
+from contact_book import BOOK
 from parser import parse_command
-
-
-BOOK = {}
+from decor import input_error
 
 
 def main():
@@ -12,16 +11,14 @@ def main():
         contact_book(user_command)
 
 
-
-
 def user_command_hello(user_command):
 
     return print("How can I help you?")
 
 
-
+@input_error
 def user_command_add(user_command):
-
+    # try:
     name = user_command[1]
     number = user_command[2]
     if not name in BOOK.keys():
@@ -29,23 +26,21 @@ def user_command_add(user_command):
     else:
         print("Такий контакт вже є у Вашій книзі")
 
-    return print(BOOK)
+    return BOOK
+    # except IndexError:
+    #     print('Bad command format. Required arguments: add [name] [number]')
 
 
-
-
+@input_error
 def user_command_change(user_command):
+
     name = user_command[1]
     number = user_command[2]
+
     if name in BOOK.keys():
         BOOK[name] = number
     else:
         return print("Такого контакта нема у Вашій книзі")
-
-
-
-
-
 
 
 def user_command_phone(user_command):
@@ -55,8 +50,7 @@ def user_command_phone(user_command):
         if name == contact:
             print(tel)
         else:
-           return  print("Такий контакт не зареєстровано у Вашій книзі")
-
+            print("Такий контакт не зареєстровано у Вашій книзі")
 
 
 def user_command_show_all(user_command):
@@ -67,7 +61,9 @@ def user_command_show_all(user_command):
 
 
 def user_command_good_bye(user_command):
-    return print('Fuck')
+    print('Good bye!')
+    exit()
+
 
 user_commands = {
 
@@ -75,8 +71,10 @@ user_commands = {
     "add": user_command_add,
     "change": user_command_change,
     "phone": user_command_phone,
-    "show all": user_command_show_all,
-    "good bye": user_command_good_bye,
+    "show": user_command_show_all,
+    "good": user_command_good_bye,
+    "exit": user_command_good_bye,
+    "close": user_command_good_bye,
 }
 
 
@@ -84,7 +82,7 @@ def contact_book(user_command):
 
     for command, handle in user_commands.items():
         if command == user_command[0]:
-           handle(user_command)
+            handle(user_command)
 
     return handle
 
